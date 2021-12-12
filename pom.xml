@@ -15,12 +15,6 @@
       <version>5.4.2</version>
       <scope>test</scope>
     </dependency>
-<dependency>
-    <groupId>com.github.spotbugs</groupId>
-    <artifactId>spotbugs</artifactId>
-    <version>3.1.10</version>
-</dependency>
-    
   </dependencies>
 
   <build>
@@ -85,12 +79,23 @@
 	<artifactId>maven-checkstyle-plugin</artifactId>
 	<version>3.0.0</version>
       </plugin>
-      
+
 <plugin>
-        <groupId>com.github.spotbugs</groupId>
-        <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>4.2.1-SNAPSHOT</version>
-      </plugin>
+  <groupId>com.github.spotbugs</groupId>
+  <artifactId>spotbugs-maven-plugin</artifactId>
+  <version>4.5.0.0</version>
+  <dependencies>
+    <!-- overwrite dependency on spotbugs if you want to specify the version of spotbugs -->
+    <dependency>
+      <groupId>com.github.spotbugs</groupId>
+      <artifactId>spotbugs</artifactId>
+      <version>4.5.1</version>
+    </dependency>
+  </dependencies>
+</plugin>
+
+
+
     </plugins>
   </build>
 
@@ -139,14 +144,8 @@
         <artifactId>maven-surefire-report-plugin</artifactId>
         <version>3.0.0-M3</version>
       </plugin>
-      
-  <plugin>
-        <groupId>com.github.spotbugs</groupId>
-        <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>4.2.1-SNAPSHOT</version>
-      </plugin>
+
     </plugins>
-  
   </reporting>
 
   <properties>
