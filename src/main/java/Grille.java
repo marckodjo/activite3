@@ -31,10 +31,11 @@ public interface Grille {
      * @param x position x dans la grille
      * @param y position y dans la grille
      * @param value valeur a mettre dans la case
-     * @throw HorsBornesException si x ou y sont hors bornes (0-8)
-     * @throw ValeurImpossibleException si la valeur est interdite aux vues des
+     * @throws Exception
+     * @throws HorsBornesException si x ou y sont hors bornes (0-8)
+     * @throws ValeurImpossibleException si la valeur est interdite aux vues des
      * autres valeurs de la grille
-     * @throw CaractereInterditException si value n'est pas un caractere
+     * @throws CaractereInterditException si value n'est pas un caractere
      * autorise ('1',...,'9')
      */
     void setValue(int x, int y, char value) throws
@@ -48,7 +49,8 @@ public interface Grille {
      * @param x position x dans la grille
      * @param y position y dans la grille
      * @return valeur dans la case x,y
-     * @throw HorsBornesException si x ou y sont hors bornes (0-8)
+     * @throws Exception
+     * @throws HorsBornesException si x ou y sont hors bornes (0-8)
      */
     char getValue(int x, int y) throws HorsBornesException;
 
@@ -66,8 +68,9 @@ public interface Grille {
      * @param x position x dans la grille
      * @param y position y dans la grille
      * @param value valeur a mettre dans la case
-     * @throw HorsBornesException si x ou y sont hors bornes (0-8)
-     * @throw CaractereInterditException si value n'est pas un caractere
+     * @throws Exception
+     * @throws HorsBornesException si x ou y sont hors bornes (0-8)
+     * @throws CaractereInterditException si value n'est pas un caractere
      * autorise ('1', ..., '9', ...)
      * @return  true / false si la valeur ou non
      */

@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * GrilleImpl.
  * @author GBIKPI BENISSANH Date E.
@@ -31,20 +33,14 @@ public class GrilleImpl implements Grille {
      * retourne la dimension du la grille.
      * @return la dimension
      */
-    public int getDimension() {
+    public final int getDimension() {
         return this.dimension;
     }
 
     /**
-     * affecte une valeur à la cellule definie.
-     * @param x ligne de la grille
-     * @param y colonne de la grille
-     * @param value valeur de la cellule
-     * @throws HorsBornesException
-     * @throws CaractereInterditException
-     * @throws ValeurImpossibleException
+     * {@inheritDoc}.
      */
-    public void setValue(final int x, final int y, final char value)
+    public final void setValue(final int x, final int y, final char value)
             throws HorsBornesException,
             CaractereInterditException, ValeurImpossibleException {
        if (x > bornemax || y > bornemax) {
@@ -59,10 +55,7 @@ public class GrilleImpl implements Grille {
                     + "un caractere autorise");
        }
 
-       boolean ligneOk = verifieLigne(x, value);
-       boolean colonneOk = verifieColonne(y, value);
-
-        if (ligneOk && colonneOk) {
+        if (!possible(x, y, value)) {
            throw
                new ValeurImpossibleException(value + " est "
                        + "une valeur interdite");
@@ -72,13 +65,10 @@ public class GrilleImpl implements Grille {
     }
 
     /**
-     * retourne la valeur de la cellule.
-     * @param x ligne de la grille
-     * @param y colonne de la grille
-     * @return la valeur de la cellule
-     * @throws HorsBornesException
+     * {@inheritDoc} .
      */
-    public char getValue(final int x, final int y) throws HorsBornesException {
+    public final char getValue(final int x, final int y)
+      throws HorsBornesException {
        if (x > bornemax || y > bornemax) {
            throw
             new HorsBornesException("Les positions x ou "
@@ -91,7 +81,7 @@ public class GrilleImpl implements Grille {
     /**
      * @return true si pas de vide sinon false.
      */
-    public boolean complete() {
+    public final boolean complete() {
       for (int i = 0; i < this.dimension; i++) {
           for (int j = 0; j < this.dimension; j++) {
             if (this.magrille[i][j] == EMPTY) {
@@ -103,16 +93,9 @@ public class GrilleImpl implements Grille {
     }
 
     /**
-     * Test si une valeur est possible dans la grille par rapport a ce qu'elle
-     * contient deja.
-     * @param x ligne de la grille
-     * @param y colonne de la grille
-     * @param value valeur à inserer
-     * @return true si la valeur est possible sinon false
-     * @throws CaractereInterditException
-     * @throws HorsBornesException
+     * {@inheritDoc} .
      */
-    public boolean possible(final int x, final int y, final char value)
+    public final boolean possible(final int x, final int y, final char value)
             throws CaractereInterditException,
             HorsBornesException {
         if (x > bornemax || y > bornemax) {
@@ -129,7 +112,8 @@ public class GrilleImpl implements Grille {
 
         boolean ligneOk = verifieLigne(x, value);
         boolean colonneOk = verifieColonne(y, value);
-        return ligneOk && colonneOk;
+        boolean regionOk = verifieRegion(x, y, value);
+        return ligneOk && colonneOk && regionOk;
     }
 
     /**
@@ -194,5 +178,69 @@ public class GrilleImpl implements Grille {
         }
       }
       return found;
+    }
+
+    /**
+     * verifie si une valeur est autorisée dans une region.
+     * @param x est un entier
+     * @param y est un entier
+     * @param value est un charactere
+     * @return vrai ou faux
+     */
+    private boolean verifieRegion(final int x, final int y,
+        final char value) {
+        boolean regionOk = true;
+        double dimensionSqrt = Math.sqrt(new Double(this.dimension));
+        int bornMaxX = getRegionBorneMax(x);
+        int bornMinX = (bornMaxX - (int) dimensionSqrt) + 1;
+
+        int bornMaxY = getRegionBorneMax(y);
+        int bornMinY = (bornMaxY - (int) dimensionSqrt) + 1;
+
+        for (int i = bornMinX; i <= bornMaxX; i++) {
+            for (int j = bornMinY; j <= bornMaxY; j++) {
+                if (this.magrille[i][j] == value) {
+                    regionOk = false;
+                    return regionOk;
+                }
+            }
+        }
+        return regionOk;
+    }
+
+    /**
+     * determine la borne max de la region des valeurs x ou y fournies.
+     * @param x est un entier
+     * @return un entier
+     */
+    private int getRegionBorneMax(final int x) {
+        int[] arr = getMultipleDeN(this.dimension);
+        double max = Math.sqrt(new Double(this.dimension));
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] > x) {
+                max = new Double(arr[i]);
+                break;
+            }
+        }
+        return (int) max;
+    }
+
+    /**
+     * generere les muliple de la dimension du tableau.
+     * @param n est un entier
+     * @return un tableau d'entier
+     */
+    private int[] getMultipleDeN(final int n) {
+        final double nsquare = Math.sqrt(new Double(n));
+        //final int p = n * n;
+        ArrayList<Integer> valeurPossible = new ArrayList<Integer>();
+        for (int i = (int) nsquare; i <= n; i++) {
+            if (n % i == 0) {
+                valeurPossible.add(i);
+            }
+        }
+        //convert arrayList into array
+        int[] arr = new int[valeurPossible.size()];
+        return arr;
     }
 }
